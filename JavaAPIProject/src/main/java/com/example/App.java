@@ -1,7 +1,6 @@
 package com.example;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.Set;
+import java.util.*;
 /**
  * Hello world!
  *
@@ -9,9 +8,10 @@ import java.util.Set;
 public class App 
 {
     public static boolean nameValid(String name) {
-        if (!name.equals("")) return true;
-        return false;
+        if (name.equals("")) return false;
+        return true;
     }
+
     public static void main(String[] args) throws Exception {
         String ratesEndpoint = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json";
         String ratesString = CurrencyAPI.getData(ratesEndpoint);
@@ -25,39 +25,19 @@ public class App
         JSONObject names = new JSONObject(namesString);
         
         Set<String> keySet = rates.keySet();
-        Object[] keyArray = keySet.toArray();
-        for (int i = 1; i < keyArray.length; i++) {
-            int j = i - 1;
-            while(j >= 0 && rates.getDouble((String) keyArray[j]) > rates.getDouble((String) keyArray[i])) {
-                Object temp = keyArray[i];
-                keyArray[i] = keyArray[j];
-                keyArray[j] = temp;
-            }
-            
-        }
-        System.out.println(keyArray[0]);
+        ArrayList<Object> keyArray = new ArrayList<Object>(keySet);
+
+        Scanner sc = new Scanner(System.in);
+        Game g = new Game(names, rates, keyArray, sc);
+        g.runRound(20, 200);
+        g.runRound(0, 50);
+
+        // System.out.println(keyArray[0]);
+        // for (Object key : keyArray) {
+        //     System.out.print(names.getString((String) key) + " -- ");
+        // }
 
 
-        int num = 0;
-        String name1 = "";
-        while (!nameValid(name1)) {
-            num = (int) (Math.random() * keyArray.length);
-            name1 = names.getString((String)keyArray[num]);
-        }
-        System.out.println(num);
-        double rate1 = rates.getDouble((String) keyArray[num]);
-        System.out.println(name1 + "--- " + rate1 + " (" + keyArray[num] + ")\n");
-
-        num = 0;
-        String name2 = "";
-        while (!nameValid(name2)) {
-            num = (int) (Math.random() * keyArray.length);
-            name2 = names.getString((String)keyArray[num]);
-        }
-        System.out.println(num);
-        double rate2 = rates.getDouble((String) keyArray[num]);
-        System.out.println(name2 + "--- " + rate2 + " (" + keyArray[num] + ")\n");
-        System.out.println("1000 " + name1 + " converts to " + ((int) (rate2 / rate1 * 100000) / 100.0) + " " + name2);
 
         // int count = 0;
         // for (int i = 0; i < keyArray.length; i++) {
@@ -70,8 +50,8 @@ public class App
         // }
         // System.out.println(count);
 
+        sc.close();
     }
-
 }
 
-// INFO LINK: https://github.com/fawazahmed0/exchange-api/blob/main/MIGRATION.md
+// INFO LINK: https://github.com/fawazahmed0/exchange-api#endpoints
