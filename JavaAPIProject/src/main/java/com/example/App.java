@@ -7,10 +7,10 @@ import java.util.*;
  */
 public class App 
 {
-    public static boolean nameValid(String name) {
-        if (name.equals("")) return false;
-        return true;
-    }
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }   
 
     public static void main(String[] args) throws Exception {
         String ratesEndpoint = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json";
@@ -29,8 +29,8 @@ public class App
 
         Scanner sc = new Scanner(System.in);
         Game g = new Game(names, rates, keyArray, sc);
-        g.runRound(20, 200);
-        g.runRound(0, 50);
+        int[] maxes = {20, 200};
+        g.playRound(4, maxes);
 
         // System.out.println(keyArray[0]);
         // for (Object key : keyArray) {
