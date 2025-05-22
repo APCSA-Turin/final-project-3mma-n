@@ -23,6 +23,8 @@ public class App
         String namesEndpoint = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
         String namesString = CurrencyAPI.getData(namesEndpoint);
         JSONObject names = new JSONObject(namesString);
+
+        JSONObject validList = new JSONObject();
         
         Set<String> keySet = rates.keySet();
         ArrayList<Object> keyArray = new ArrayList<Object>(keySet);
@@ -32,26 +34,11 @@ public class App
         int[] maxes = {20, 200};
         g.playRound(4, maxes);
 
-        // System.out.println(keyArray[0]);
-        // for (Object key : keyArray) {
-        //     System.out.print(names.getString((String) key) + " -- ");
-        // }
-
-
-
-        // int count = 0;
-        // for (int i = 0; i < keyArray.length; i++) {
-        //     String name = names.getString((String)keyArray[i]);
-        //     double rate = rates.getDouble((String) keyArray[i]);
-        //     if (nameValid(name)) {
-        //         System.out.println(name + "--- " + rate + " (" + keyArray[i] + ")");
-        //         count++;
-        //     }
-        // }
-        // System.out.println(count);
-
         sc.close();
     }
 }
 
 // INFO LINK: https://github.com/fawazahmed0/exchange-api#endpoints
+// OTHER LINKS: https://api.nbp.pl/en.html https://frankfurter.dev/
+// https://stackoverflow.com/questions/7463414/what-s-the-best-way-to-load-a-jsonobject-from-a-json-text-file
+

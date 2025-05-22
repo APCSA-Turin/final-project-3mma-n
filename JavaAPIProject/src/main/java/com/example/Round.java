@@ -151,7 +151,7 @@ public class Round {
 
     public String hint() {
         // gets the rate of one of the two currencies at random
-        String thisKey = keys[(int) Math.random() * 2];
+        String thisKey = keys[(int) (Math.random() * 2)];
         double thisVal = rates.getDouble(thisKey);
         String thisName = names.getString(thisKey);
         // selects another different currency to compare it to
