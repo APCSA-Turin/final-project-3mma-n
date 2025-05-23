@@ -32,7 +32,7 @@ public class App
         Scanner sc = new Scanner(System.in);
         Game g = new Game(names, rates, keyArray, sc);
         int[] maxes = {20, 200};
-        g.playRound(4, maxes);
+        g.playGame(4, maxes);
 
         sc.close();
     }

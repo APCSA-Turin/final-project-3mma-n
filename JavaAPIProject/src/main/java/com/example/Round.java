@@ -12,6 +12,7 @@ public class Round {
     private int numAnswers;
     private int[] maxes;
     private double conversion;
+    private int baseNum;
 
     public Round(Game game, int n, int[] m) {
         // initializes instance variables associated with the game that created it
@@ -26,6 +27,8 @@ public class Round {
 
         // generates the 2 random keys for the 2 currencies
         keys = randomKeys();
+        // chooses the amount of currency to be converted (random multiple of 50 from 50 to 1000)
+        baseNum = ((int) (Math.random() * 20) + 1) * 50; 
         // calculates the conversion rate
         conversion = getConversion(keys);
     }
@@ -35,7 +38,6 @@ public class Round {
         String name1 = names.getString(keys[0]);
         String name2 = names.getString(keys[1]);
         // gets the conversion rate
-        double conversion = getConversion(keys);
         // initializes new variables to be used during the round
         int hints = 3;
         int guesses = 2;
@@ -60,7 +62,8 @@ public class Round {
                 System.out.println(hintStr);
             }
             System.out.println("-----------------------------------------------------");
-            System.out.println("1000 " + name1 + " converts to how many " + name2 + "?");
+            System.out.println(baseNum + " " + name1 + " converts to how many " + name2 + "?");
+            System.out.println(conversion);
             for (int i = 0; i < numAnswers; i++) {
                 System.out.println((i + 1) + ") " + choices[i] + " " + name2);
             }
@@ -107,7 +110,7 @@ public class Round {
             sc.nextLine();
         }
         // provides the correct answer
-        System.out.println("1000 " + name1 + " converts to " + conversion + " " + name2);
+        System.out.println(baseNum + " " + name1 + " converts to " + conversion + " " + name2);
         if (guesses > 0) {
             return 3 + (guesses * 2) + hints;
         }
@@ -127,9 +130,9 @@ public class Round {
         return keys;
     }
 
-    // returns the approximate value of 1000 of one currency converted to the second currency
+    // returns the approximate value of the baseNum of one currency converted to the second currency
     public double getConversion(String[] keys) {
-        return (int) (rates.getDouble(keys[1]) / rates.getDouble(keys[0]) * 100000) / 100.0;
+        return (int) (rates.getDouble(keys[1]) / rates.getDouble(keys[0]) * (baseNum * 100)) / 100.0;
     }
 
     // generates a number of fake answers (with one being the real answer)
@@ -151,25 +154,35 @@ public class Round {
 
     public String hint() {
         // gets the rate of one of the two currencies at random
-        String thisKey = keys[(int) (Math.random() * 2)];
-        double thisVal = rates.getDouble(thisKey);
+        System.out.println("Which currency would you like to compare?");
+        System.out.println("1) " + names.getString(keys[0]));
+        System.out.println("2) " + names.getString(keys[1]));
+        System.out.println("-----------------------------------------------------");
+        System.out.print("Select: ");
+        String thisKey = keys[sc.nextInt() - 1];
+        sc.nextLine();
         String thisName = names.getString(thisKey);
-        // selects another different currency to compare it to
-        String otherKey = (String) keyArray.get((int) (Math.random() * maxes[1]));
-        double otherVal = rates.getDouble(otherKey);
+
+        App.clearScreen();
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Which currency will you compare " + thisName + " to?");
+        String[] compareKeys = new String[3];
+        for (int i = 0; i < 3; i++) {
+            compareKeys[i] = (String) keyArray.get((int) (Math.random() * maxes[1]));
+            System.out.println((i + 1) + ") " + names.getString(compareKeys[i]));
+        }
+        System.out.println("-----------------------------------------------------");
+        System.out.print("Select: ");
+        String otherKey = compareKeys[sc.nextInt() - 1];
+        sc.nextLine();
         String otherName = names.getString(otherKey);
 
         // builds a string based on how the first rate compares to the new one
+        String[] tempKeys = {thisKey, otherKey};
         String str = "";
-        str += "1 " + thisName + " is worth ";
-        if (thisVal < otherVal) {
-            str += "more than";
-        } else if (thisVal > otherVal) {
-            str += "less than";
-        } else {
-            str += "the same as";
-        }
-        str += " 1 " + otherName;
+        str += baseNum + " " + thisName + " is worth ";
+        str += getConversion(tempKeys);
+        str += " " + otherName;
         System.out.println(str);
         return str;
     }

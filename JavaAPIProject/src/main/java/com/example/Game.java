@@ -33,7 +33,27 @@ public class Game {
             }
         }
     }
-    public void playRound(int numAnswers, int[] maxes) {
+
+    public void playGame(int numAnswers, int[] maxes) {
+        App.clearScreen();
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Welcome to the Currency Conversion Game!");
+        System.out.print("Would you like to read the instructions? (y/n) ");
+        if (sc.nextLine().equals("y")) {
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.println("You will be given a random amount of a currency");
+            System.out.println("You must guess the conversion rate to a second currency out of provided choices.");
+            System.out.println("Example: 100 US Dollar converts to how many Euro?");
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.println("You will have 2 chances to guess the correct answer, and 3 available hints.");
+            System.out.println("Using a hint will allow you to compare one of the two currencies to a third one.");
+            System.out.println("Each hint used or incorrect guess will decrease the number of points you earn.");
+            System.out.println("However, if you guess wrong twice, you will earn no points!");
+            System.out.println("Good LucK!!");
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.print("Press Enter to Continue. ");
+            sc.nextLine();
+        }
         String input = "y";
         while (input.equals("y")) {
             Round r = new Round(this, numAnswers, maxes);
