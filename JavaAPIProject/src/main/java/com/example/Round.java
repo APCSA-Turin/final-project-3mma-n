@@ -63,7 +63,6 @@ public class Round {
             }
             System.out.println("-----------------------------------------------------");
             System.out.println(baseNum + " " + name1 + " converts to how many " + name2 + "?");
-            System.out.println(conversion);
             for (int i = 0; i < numAnswers; i++) {
                 System.out.println((i + 1) + ") " + choices[i] + " " + name2);
             }

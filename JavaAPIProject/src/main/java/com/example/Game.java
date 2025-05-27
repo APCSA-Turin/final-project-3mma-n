@@ -15,56 +15,75 @@ public class Game {
         keyArray = k;
         sc = s;
         score = 0;
-        setupKeys();
+        removeBadKeys();
     }
 
-    public void setupKeys() {
-        // sorts the keys based on which is closest to the value of one Euro using insertion sort
+    public void removeBadKeys() {
         for (int i = 1; i < keyArray.size(); i++) {
             if (names.getString((String) keyArray.get(i)).equals("")) {
                 keyArray.remove(i);
                 i--;
-            } else {
-                int j = i;
-                while(j > 0 && (distToOne(rates.getDouble((String) keyArray.get(j))) < distToOne(rates.getDouble((String) keyArray.get(j - 1))))) {
-                    keyArray.set(j - 1, keyArray.set(j, keyArray.get(j - 1)));
-                    j--;
-                }
             }
         }
     }
 
-    public void playGame(int numAnswers, int[] maxes) {
-        App.clearScreen();
-        System.out.println("-----------------------------------------------------");
-        System.out.println("Welcome to the Currency Conversion Game!");
-        System.out.print("Would you like to read the instructions? (y/n) ");
-        if (sc.nextLine().equals("y")) {
-            System.out.println("-------------------------------------------------------------------------------------");
-            System.out.println("You will be given a random amount of a currency");
-            System.out.println("You must guess the conversion rate to a second currency out of provided choices.");
-            System.out.println("Example: 100 US Dollar converts to how many Euro?");
-            System.out.println("-------------------------------------------------------------------------------------");
-            System.out.println("You will have 2 chances to guess the correct answer, and 3 available hints.");
-            System.out.println("Using a hint will allow you to compare one of the two currencies to a third one.");
-            System.out.println("Each hint used or incorrect guess will decrease the number of points you earn.");
-            System.out.println("However, if you guess wrong twice, you will earn no points!");
-            System.out.println("Good LucK!!");
-            System.out.println("-------------------------------------------------------------------------------------");
-            System.out.print("Press Enter to Continue. ");
-            sc.nextLine();
+    // sorts the keys in an order based on the inputted method
+    public void orderKeys(int method) {
+        for (int i = 1; i < keyArray.size(); i++) {
+            int j = i;
+            boolean bool = true;
+            while(bool) {
+                keyArray.set(j - 1, keyArray.set(j, keyArray.get(j - 1)));
+                j--;
+                if (j <= 0) {
+                    break;
+                }
+                // from closest to the value of one euro to furthest
+                if (method == 1) {
+                    bool = (distToOne(rates.getDouble((String) keyArray.get(j))) < distToOne(rates.getDouble((String) keyArray.get(j - 1))));
+                // from A - Z by name
+                } else if (method == 2) {
+                    bool = (names.getString((String) keyArray.get(j)).compareTo(names.getString((String) keyArray.get(j - 1))) < 0);
+                }
+            }
+            
         }
+    }
+
+    public void playGame(int numAnswers, int[] maxes) {
+        orderKeys(1);
         String input = "y";
         while (input.equals("y")) {
             Round r = new Round(this, numAnswers, maxes);
             int earned = r.play();
+            if (earned == 0) {
+                break;
+            }
             score += earned;
             System.out.println("Round over! " + earned + " points earned.");
             System.out.println("Current Score: " + score);
-            System.out.print("Play Again? (y/n) ");
+            System.out.print("Continue Playing? (y/n) ");
             input = sc.nextLine();
         }
-        System.out.println("Goodbye!");
+        System.out.println("Game Over! Score: " + score);
+        System.out.print("Press Enter to Return to Menu. ");
+        sc.nextLine();
+    }
+
+    public void learnConversions() {
+        System.out.println("Welcome to the Currency Conversion Learning Tool!");
+        System.out.println("Please Select an option below: ");
+        orderKeys(2);
+        int i = 0;
+        while (i < keyArray.size()) {
+            String letter = names.getString((String) keyArray.get(i)).substring(0, 1);
+            System.out.println(letter + " ---------------------------------------------------");
+            while (i < keyArray.size() && names.getString((String) keyArray.get(i)).substring(0, 1).equals(letter)) {
+                System.out.println("  " + names.getString((String) keyArray.get(i)) + " - " + rates.getDouble((String) keyArray.get(i)));
+                i++;
+            }
+        }
+        System.out.println("-----------------------------------------------------");
     }
 
     public JSONObject getNames() {
