@@ -54,14 +54,16 @@ public class Round {
         while (guesses > 0) {
             // clears the screen
             App.clearScreen();
-            // prints out the question and answer choices
             System.out.println("-----------------------------------------------------");
+            // pritns remaining guesses and hints
             System.out.println("Guesses Remaining: " + guesses + "    Hints Remaining: " + hints);
+            // prints every hint already given to the player
             if (!hintStr.equals("")) {
                 System.out.print("-----------------------------------------------------");
                 System.out.println(hintStr);
             }
             System.out.println("-----------------------------------------------------");
+            // prints the question and answer choices
             System.out.println(baseNum + " " + name1 + " converts to how many " + name2 + "?");
             for (int i = 0; i < numAnswers; i++) {
                 System.out.println((i + 1) + ") " + choices[i] + " " + name2);
@@ -116,6 +118,7 @@ public class Round {
         return 0;
     }
 
+    // generates a random pair of keys
     public String[] randomKeys() {
         // selects the first currency
         String[] keys = new String[2];
@@ -151,8 +154,13 @@ public class Round {
         return list;
     }
 
+    /* allows the player to recieve a hint:
+     * first, the player chooses one of the two currencies from the question to compare
+     * then, they choose an option out of 3 other currencies to compare it to
+     * after this, they are told the conversion rate between those two
+     */
     public String hint() {
-        // gets the rate of one of the two currencies at random
+        // allows the player to pick the first currency
         System.out.println("Which currency would you like to compare?");
         System.out.println("1) " + names.getString(keys[0]));
         System.out.println("2) " + names.getString(keys[1]));
@@ -163,10 +171,13 @@ public class Round {
         String thisName = names.getString(thisKey);
 
         App.clearScreen();
+
+        // allows the player to pick the second currency
         System.out.println("-----------------------------------------------------");
         System.out.println("Which currency will you compare " + thisName + " to?");
         String[] compareKeys = new String[3];
         for (int i = 0; i < 3; i++) {
+            // randomly generates a list of 3 keys to compare the currency to
             compareKeys[i] = (String) keyArray.get((int) (Math.random() * maxes[1]));
             System.out.println((i + 1) + ") " + names.getString(compareKeys[i]));
         }

@@ -7,11 +7,13 @@ import java.util.*;
  */
 public class App 
 {
+    // clears the screen
     public static void clearScreen() {  
         System.out.print("\033[H\033[2J");  
         System.out.flush();  
     }
 
+    // prints out instructions for the player
     public static void instructions() {
         System.out.println("-------------------------------------------------------------------------------------");
         System.out.println("You will be given a random amount of a currency");
@@ -27,25 +29,30 @@ public class App
     }
 
     public static void main(String[] args) throws Exception {
+        // retrieves the conversion rates of each currency
         String ratesEndpoint = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json";
         String ratesString = CurrencyAPI.getData(ratesEndpoint);
-        // JSONArray obj = new JSONArray(ratesString);
-        // JSONArray rates = obj.getJSONArray(0);
         JSONObject obj = new JSONObject(ratesString);
         JSONObject rates = obj.getJSONObject("eur");
 
+        // retrieves the names of each currency
         String namesEndpoint = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
         String namesString = CurrencyAPI.getData(namesEndpoint);
         JSONObject names = new JSONObject(namesString);
         
+        // creates an ArrayList to store all keys
         Set<String> keySet = rates.keySet();
         ArrayList<Object> keyArray = new ArrayList<Object>(keySet);
 
         Scanner sc = new Scanner(System.in);
+
+        // creates a new game
         Game g = new Game(names, rates, keyArray, sc);
 
+        // runs until the user chooses to quit
         int input = 1;
         while (input < 4) {
+            // clears screen and prints the user's primary options
             App.clearScreen();
             System.out.println("-----------------------------------------------------");
             System.out.println("Welcome to the Currency Conversion Game!");
@@ -54,20 +61,24 @@ public class App
             System.out.println("2) View Instructions");
             System.out.println("3) Learn Conversion Rates");
             System.out.println("4) Quit");
+            System.out.print("Select Option: ");
             input = sc.nextInt();
             sc.nextLine();
             if (input == 1) {
+                // runs the game
                 int[] maxes = {20, 200};
                 g.playGame(4, maxes);
             } else if (input == 2) {
+                // prints the instructions
                 instructions();
+                System.out.print("Press Enter to Continue. ");
+                sc.nextLine();
             } else if (input == 3) {
+                // runs the learning tool
                 g.learnConversions();
             } else {
                 System.out.println("Goodbye!");
             }
-            System.out.print("Press Enter to Continue. ");
-            sc.nextLine();
         }
         sc.close();
     }
