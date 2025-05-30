@@ -118,7 +118,7 @@ public class Game {
         }
     }
 
-    // necessary getters and setters for major instance variables
+    // necessary getters for major instance variables
     public JSONObject getNames() {
         return names;
     }
