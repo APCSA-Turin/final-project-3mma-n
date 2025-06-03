@@ -4,9 +4,11 @@ This project allows the user to play rounds of a currency conversion game and ge
 
 # **2\. Code Breakdown**
 
-## **App.java:** Imports JSON Files and runs the main menu
+## **App.java:**
 
-## **main(String\[\] args)**
+Imports JSON Files and runs the main menu
+
+### main(String\[\] args)
 
 \- Entry point of the program.  
 \- Calls the methods that retrieve the names and rates lists  
@@ -15,29 +17,33 @@ This project allows the user to play rounds of a currency conversion game and ge
 \- Initializes a Scanner object  
 \- Runs a while loop allowing the user to select options
 
-## **instructions()**
+### instructions()
 
 \- Prints all the instructions for playing the game
 
-## **clearScreen()**
+### clearScreen()
 
 .- Clears the terminal
 
-## **Game.java:** Responsible for managing the keyArray and running Rounds of the Game
+## **Game.java:** 
 
-## **int score:** Stores the accumulated score for the session
+Responsible for managing the keyArray and running Rounds of the Game
 
-## **playGame(int, numAnswers, int\[\] maxes)**
+### **int score:** 
+
+### \- Stores the accumulated score for the session
+
+### playGame(int, numAnswers, int\[\] maxes)
 
 \- Starts a while loop allowing the user to play until they lose or choose to stop  
 \- Stores the score after each Round is run, and breaks the loop if it's zero  
 \- Initializes a Round object on each iteration and runs the play method
 
-## **removeBadKeys()**
+### removeBadKeys()
 
 \- Removes all currencies with empty names from the keyArray
 
-## **orderKeys(int method)**
+### orderKeys(int method)
 
 \- Uses insertion sort to organize the keys in an order based on the given method  
 \- Method 1 is reciprocal distance to one (eg. 0.5 and 2 are both 2x away)  
@@ -45,31 +51,56 @@ This project allows the user to play rounds of a currency conversion game and ge
 
 ## 
 
-## **double distToOne(double num)**
+### double distToOne(double num)
 
 \- Returns the reciprocal distance between num and one
 
-## **JSONObject getNames()**
+### JSONObject getNames()
 
-## **JSONObject getRates()**
+\- Returns the JSONObject storing currency names
 
-## **ArrayList\<Object\> getKeyArray()**
+### JSONObject getRates()
 
-## **Scanner getScanner()**
+\- Returns the JSONObject storing exchange rates for 1 euro
 
-## **int getScore()**
+### ArrayList\<Object\> getKeyArray()
 
-^^ Above methods get the instance variable specified in the name
+\- Returns the ArrayList\<Object\> with all keys (currency symbols)
 
-## **Round.java:** Runs a single round of the Currency Conversion Game
+### Scanner getScanner()
 
-**String\[\] keys:** Stores the keys of the 2 random currencies  
-**int\[\] maxes:** Stores the max indices for the first and second random currencies  
-**int numAnswers:** Determines the number of answer choices  
-**double conversion:** The conversion rate between the 2 currencies  
-**int baseNum:** The amount of the first currency used in the question, randomized from 50 to 1000
+\- Returns the Scanner initialized in App
 
-**int play()**  
+### int getScore()
+
+\- Returns the player's total score
+
+## **Round.java:** 
+
+Runs a single round of the Currency Conversion Game
+
+### String\[\] keys: 
+
+Stores the keys of the 2 random currencies
+
+### int\[\] maxes: 
+
+Stores the max indices for the first and second random currencies
+
+### int numAnswers: 
+
+Determines the number of answer choices
+
+### double conversion: 
+
+The conversion rate between the 2 currencies
+
+### int baseNum:
+
+The amount of the first currency used in the question, randomized from 50 to 1000
+
+### int play()
+
 \- Plays a round of the game and returns the earned score  
 \- Runs a while loop allowing the player to guess or use a hint  
 \- Given hints and incorrect guesses are printed to the selection screen after they are used  
@@ -77,23 +108,30 @@ This project allows the user to play rounds of a currency conversion game and ge
 \- Returns zero if the player fails to guess the answer correctly  
 \- Otherwise, returns a base score of 5, \+1 for each hint left and \+2 for each guess left
 
-**String\[\] randomKeys()**  
+### String\[\] randomKeys()
+
 \- Returns a set of two random keys within the values of the maxes\[\] list
 
-**double getConversion(String\[\] keys)**  
+### double getConversion(String\[\] keys)
+
 \- Returns the conversion between the 2 keys in the provided list
 
-**double\[\] answers()**  
+### double\[\] answers()
+
 \- Returns a list of fake answers, with a random slot replaced by the real conversion rate
 
-**String hint()**  
+### String hint()
+
 \- Prompts the user to compare one of the currencies from the question to another  
 \- Prompts the user to choose between 3 other random currencies to compare it to  
 \- Prints the conversion rate between the 2 selected currencies
 
-## **CurrencyAPI.java:** Responsible for retrieving JSON Files
+## **CurrencyAPI.java:**
 
-**String getData(String endpoint)**  
+Responsible for retrieving JSON Files
+
+### String getData(String endpoint)
+
 \- Returns a String retrieved using the given endpoint
 
 # **3\. Features Implemented (Rubric Aligned)**
