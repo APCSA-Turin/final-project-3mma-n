@@ -1,30 +1,54 @@
 package com.example;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.*;
 
 public class Game {
     private JSONObject names;
     private JSONObject rates;
-    private ArrayList<Object> keyArray;
+    private ArrayList<String> fullArray;
+    private ArrayList<String> keyArray;
+    private JSONObject countries;
     private Scanner sc;
     private int score;
 
-    public Game(JSONObject n, JSONObject r, ArrayList<Object> k, Scanner s) {
+    public Game(JSONObject n, JSONObject r, ArrayList<String> k, Scanner s) throws IOException {
         names = n;
         rates = r;
-        keyArray = k;
+        fullArray = k;
         sc = s;
         score = 0;
-        removeBadKeys();
+        countries = new JSONObject(CurrencyAPI.getFile("/workspaces/final-project-3mma-n/JavaAPIProject/src/main/java/com/example/CurrencyList.JSON"));
+        setCountryOnly(true);
     }
 
 
     // removes all keys with empty names from the array
     public void removeBadKeys() {
         for (int i = 1; i < keyArray.size(); i++) {
-            if (names.getString((String) keyArray.get(i)).equals("")) {
+            if (names.getString(keyArray.get(i)).equals("")) {
                 keyArray.remove(i);
                 i--;
+            }
+        }
+    }
+
+
+    public void setCountryOnly(boolean bool) {
+        keyArray = new ArrayList<String>();
+        if (bool) {
+            for (String item : fullArray) {
+                try {
+                    JSONObject country = countries.getJSONObject(item.toUpperCase());
+                    keyArray.add(item);
+                } catch (Exception JSONException) {
+                }
+            }
+        } else {
+            for (String item : fullArray) {
+                keyArray.add(item);
             }
         }
     }
@@ -42,10 +66,10 @@ public class Game {
                 }
                 // from closest to the value of one euro to furthest
                 if (method == 1) {
-                    bool = (distToOne(rates.getDouble((String) keyArray.get(j))) < distToOne(rates.getDouble((String) keyArray.get(j - 1))));
+                    bool = (distToOne(rates.getDouble(keyArray.get(j))) < distToOne(rates.getDouble(keyArray.get(j - 1))));
                 // from A - Z by name
                 } else if (method == 2) {
-                    bool = (names.getString((String) keyArray.get(j)).toUpperCase().compareTo(names.getString((String) keyArray.get(j - 1)).toUpperCase()) < 0);
+                    bool = (names.getString(keyArray.get(j)).toUpperCase().compareTo(names.getString(keyArray.get(j - 1)).toUpperCase()) < 0);
                 }
             }
             
@@ -99,10 +123,10 @@ public class Game {
             if (input == 1) {
                 int i = 0;
                 while (i < keyArray.size()) {
-                    String letter = names.getString((String) keyArray.get(i)).substring(0, 1);
+                    String letter = names.getString(keyArray.get(i)).substring(0, 1);
                     System.out.println(letter + " ---------------------------------------------------");
-                    while (i < keyArray.size() && names.getString((String) keyArray.get(i)).substring(0, 1).equals(letter)) {
-                        System.out.println("  " + names.getString((String) keyArray.get(i)) + " - " + rates.getDouble((String) keyArray.get(i)));
+                    while (i < keyArray.size() && names.getString(keyArray.get(i)).substring(0, 1).equals(letter)) {
+                        System.out.println("  " + names.getString(keyArray.get(i)) + " - " + rates.getDouble(keyArray.get(i)));
                         i++;
                     }
                 }
@@ -125,7 +149,7 @@ public class Game {
     public JSONObject getRates() {
         return rates;
     }
-    public ArrayList<Object> getKeyArray() {
+    public ArrayList<String> getKeyArray() {
         return keyArray;
     }
     public Scanner getScanner() {
@@ -148,9 +172,9 @@ public class Game {
         sub = sub.toUpperCase();
         int i = 0;
         while (i < keyArray.size()) {
-            String current = names.getString((String) keyArray.get(i));
+            String current = names.getString(keyArray.get(i));
             if (current.length() >= sub.length() && current.substring(0, sub.length()).toUpperCase().equals(sub)) {
-                System.out.println("  " + current + " - " + rates.getDouble((String) keyArray.get(i)));
+                System.out.println("  " + current + " - " + rates.getDouble( keyArray.get(i)));
             }
             i++;
         }

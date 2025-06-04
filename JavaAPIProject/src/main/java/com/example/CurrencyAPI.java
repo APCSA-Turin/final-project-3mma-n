@@ -1,8 +1,12 @@
 package com.example;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.json.JSONObject;
 
@@ -29,6 +33,10 @@ public class CurrencyAPI {
         buff.close(); //close the bufferreader
         connection.disconnect(); //disconnect from server 
         return content.toString(); //return the content as a string
+    }
+
+    public static String getFile(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 }
 

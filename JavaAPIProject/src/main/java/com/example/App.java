@@ -42,9 +42,17 @@ public class App
         
         // creates an ArrayList to store all keys
         Set<String> keySet = rates.keySet();
-        ArrayList<Object> keyArray = new ArrayList<Object>(keySet);
+        ArrayList<Object> objArray = new ArrayList<Object>(keySet);
+        ArrayList<String> keyArray = new ArrayList<String>();
+        for (Object item : objArray) {
+            keyArray.add((String) item);
+        }
+
+        String fileStr = CurrencyAPI.getFile("/workspaces/final-project-3mma-n/JavaAPIProject/src/main/java/com/example/CurrencyList.JSON");
+        System.out.println(fileStr);
 
         Scanner sc = new Scanner(System.in);
+        sc.nextLine();
 
         // creates a new game
         Game g = new Game(names, rates, keyArray, sc);
@@ -84,7 +92,7 @@ public class App
     }
 }
 
-// INFO LINK: https://github.com/fawazahmed0/exchange-api#endpoints
+// INFO LINK: https://github.com/fawazahmed0/exchange-api
 // OTHER LINKS: https://api.nbp.pl/en.html https://frankfurter.dev/
 // https://stackoverflow.com/questions/7463414/what-s-the-best-way-to-load-a-jsonobject-from-a-json-text-file
 

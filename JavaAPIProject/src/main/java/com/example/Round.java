@@ -6,7 +6,7 @@ public class Round {
     // instance variables
     private JSONObject names;
     private JSONObject rates;
-    private ArrayList<Object> keyArray;
+    private ArrayList<String> keyArray;
     private Scanner sc;
     private String[] keys;
     private int numAnswers;
@@ -122,12 +122,12 @@ public class Round {
     public String[] randomKeys() {
         // selects the first currency
         String[] keys = new String[2];
-        keys[0] = (String) keyArray.get((int) (Math.random() * maxes[0]));
+        keys[0] = keyArray.get((int) (Math.random() * maxes[0]));
 
         // selects the second currency
         keys[1] = keys[0];
         while (keys[0].equals(keys[1])) {
-            keys[1] = (String) keyArray.get((int) (Math.random() * maxes[1]));
+            keys[1] = keyArray.get((int) (Math.random() * maxes[1]));
         }
         return keys;
     }
@@ -178,7 +178,7 @@ public class Round {
         String[] compareKeys = new String[3];
         for (int i = 0; i < 3; i++) {
             // randomly generates a list of 3 keys to compare the currency to
-            compareKeys[i] = (String) keyArray.get((int) (Math.random() * maxes[1]));
+            compareKeys[i] = keyArray.get((int) (Math.random() * maxes[1]));
             System.out.println((i + 1) + ") " + names.getString(compareKeys[i]));
         }
         System.out.println("-----------------------------------------------------");
