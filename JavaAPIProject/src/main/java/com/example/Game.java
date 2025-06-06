@@ -21,21 +21,23 @@ public class Game {
         sc = s;
         score = 0;
         countries = new JSONObject(CurrencyAPI.getFile("/workspaces/final-project-3mma-n/JavaAPIProject/src/main/java/com/example/CurrencyList.JSON"));
+        removeBadKeys();
         setCountryOnly(true);
     }
 
 
     // removes all keys with empty names from the array
     public void removeBadKeys() {
-        for (int i = 1; i < keyArray.size(); i++) {
-            if (names.getString(keyArray.get(i)).equals("")) {
-                keyArray.remove(i);
+        for (int i = 1; i < fullArray.size(); i++) {
+            if (names.getString(fullArray.get(i)).equals("")) {
+                fullArray.remove(i);
                 i--;
             }
         }
     }
 
-
+    // true: sets keyArray to only contain currencies of real countries
+    // false: sets keyArray to contain all currencies
     public void setCountryOnly(boolean bool) {
         keyArray = new ArrayList<String>();
         if (bool) {
@@ -77,7 +79,7 @@ public class Game {
     }
 
     // starts the game
-    public void playGame(int numAnswers, int[] maxes) {
+    public void playGame(int numAnswers) {
         // orders the keys based on reciprocal distance to the value of one euro
         orderKeys(1);
 
@@ -85,7 +87,7 @@ public class Game {
         String input = "y";
         while (input.equals("y")) {
             // creates a new round and runs it
-            Round r = new Round(this, numAnswers, maxes);
+            Round r = new Round(this, numAnswers);
             int earned = r.play();
             // ends the game if the player fails to guess correctly
             if (earned == 0) {
@@ -107,32 +109,48 @@ public class Game {
 
     public void learnConversions() {
         int input = 1;
-        while (input < 3) {
+        String baseKey = "eur";
+        while (input < 4) {
             orderKeys(2);
             // clears screen and prints the user's primary options
             App.clearScreen();
             System.out.println("-----------------------------------------------------");
             System.out.println("Welcome to the Currency Conversion Learning Tool!");
             System.out.println("Select an option below: ");
-            System.out.println("1) See all rates A-Z compared to one Euro");
+            System.out.println("1) See all rates A-Z compared to the Base Currency");
             System.out.println("2) See rates of currencies starting with a certain string");
-            System.out.println("3) Return to Menu");
+            System.out.println("3) Change Base Currency (Currently " + names.getString(baseKey) + ")");
+            System.out.println("4) Return to Menu");
             System.out.print("Select Option: ");
             input = sc.nextInt();
             sc.nextLine();
             if (input == 1) {
                 int i = 0;
                 while (i < keyArray.size()) {
+                    // prints a divider to organize by starting letter
                     String letter = names.getString(keyArray.get(i)).substring(0, 1);
                     System.out.println(letter + " ---------------------------------------------------");
+                    // prints all currencies starting with that letter
                     while (i < keyArray.size() && names.getString(keyArray.get(i)).substring(0, 1).equals(letter)) {
-                        System.out.println("  " + names.getString(keyArray.get(i)) + " - " + rates.getDouble(keyArray.get(i)));
+                        printFromIDX(i, baseKey);
                         i++;
                     }
                 }
             } else if (input == 2) {
                 System.out.print("Enter the String that the currency must start with (eg. 'E' or 'Al') ");
-                printInRange(sc.nextLine());
+                printInRange(sc.nextLine(), baseKey);
+            } else if (input == 3) {
+                // allows the user to change the base currency
+                System.out.print("Enter the currency symbol to make the base currency: ");
+                String temp = sc.nextLine();
+                // ensures that the entered key is actually valid
+                try {
+                    double testVal = rates.getDouble(temp);
+                    baseKey = temp;
+                    System.out.println("Base currency changed to " + names.getString(baseKey));
+                } catch (Exception JSONException) {
+                    System.out.println("Invalid Key Entered");
+                }
             } else {
                 break;
             }
@@ -168,15 +186,24 @@ public class Game {
         return num;
     }
 
-    public void printInRange(String sub) {
+    // prints data for all currencies starting with the string sub
+    public void printInRange(String sub, String baseKey) {
         sub = sub.toUpperCase();
         int i = 0;
         while (i < keyArray.size()) {
             String current = names.getString(keyArray.get(i));
             if (current.length() >= sub.length() && current.substring(0, sub.length()).toUpperCase().equals(sub)) {
-                System.out.println("  " + current + " - " + rates.getDouble( keyArray.get(i)));
+                printFromIDX(i, baseKey);
             }
             i++;
         }
     }
+
+    // prints data for a currency given its index
+    public void printFromIDX(int idx, String baseKey) {
+        String key = keyArray.get(idx);
+        double num = rates.getDouble(baseKey) / rates.getDouble(key);
+        System.out.println("  " + names.getString(key) + " (" + key.toUpperCase() + ") - " + num + " " + names.getString(baseKey));
+    }
+
 }

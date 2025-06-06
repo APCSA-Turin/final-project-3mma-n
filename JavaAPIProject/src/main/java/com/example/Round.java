@@ -10,11 +10,10 @@ public class Round {
     private Scanner sc;
     private String[] keys;
     private int numAnswers;
-    private int[] maxes;
     private double conversion;
     private int baseNum;
 
-    public Round(Game game, int n, int[] m) {
+    public Round(Game game, int n) {
         // initializes instance variables associated with the game that created it
         names = game.getNames();
         rates = game.getRates();
@@ -23,7 +22,6 @@ public class Round {
 
         // initializes variables provided in the constructor
         numAnswers = n;
-        maxes = m;
 
         // generates the 2 random keys for the 2 currencies
         keys = randomKeys();
@@ -40,7 +38,7 @@ public class Round {
         // gets the conversion rate
         // initializes new variables to be used during the round
         int hints = 3;
-        int guesses = 2;
+        int guesses = 3;
         int numAnswers = 4;
         String hintStr = "";
         
@@ -113,7 +111,7 @@ public class Round {
         // provides the correct answer
         System.out.println(baseNum + " " + name1 + " converts to " + conversion + " " + name2);
         if (guesses > 0) {
-            return 3 + (guesses * 2) + hints;
+            return (guesses * 2) + hints;
         }
         return 0;
     }
@@ -122,12 +120,12 @@ public class Round {
     public String[] randomKeys() {
         // selects the first currency
         String[] keys = new String[2];
-        keys[0] = keyArray.get((int) (Math.random() * maxes[0]));
+        keys[0] = keyArray.get((int) (Math.random() * keyArray.size()));
 
         // selects the second currency
         keys[1] = keys[0];
         while (keys[0].equals(keys[1])) {
-            keys[1] = keyArray.get((int) (Math.random() * maxes[1]));
+            keys[1] = keyArray.get((int) (Math.random() * keyArray.size()));
         }
         return keys;
     }
@@ -178,7 +176,7 @@ public class Round {
         String[] compareKeys = new String[3];
         for (int i = 0; i < 3; i++) {
             // randomly generates a list of 3 keys to compare the currency to
-            compareKeys[i] = keyArray.get((int) (Math.random() * maxes[1]));
+            compareKeys[i] = keyArray.get((int) (Math.random() * keyArray.size()));
             System.out.println((i + 1) + ") " + names.getString(compareKeys[i]));
         }
         System.out.println("-----------------------------------------------------");

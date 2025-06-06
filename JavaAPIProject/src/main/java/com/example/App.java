@@ -49,17 +49,15 @@ public class App
         }
 
         String fileStr = CurrencyAPI.getFile("/workspaces/final-project-3mma-n/JavaAPIProject/src/main/java/com/example/CurrencyList.JSON");
-        System.out.println(fileStr);
 
         Scanner sc = new Scanner(System.in);
-        sc.nextLine();
 
         // creates a new game
         Game g = new Game(names, rates, keyArray, sc);
-
+        boolean countryOnly = true;
         // runs until the user chooses to quit
         int input = 1;
-        while (input < 4) {
+        while (input < 5) {
             // clears screen and prints the user's primary options
             App.clearScreen();
             System.out.println("-----------------------------------------------------");
@@ -68,14 +66,21 @@ public class App
             System.out.println("1) Play Game");
             System.out.println("2) View Instructions");
             System.out.println("3) Learn Conversion Rates");
-            System.out.println("4) Quit");
+            // displays differently based on wheter countryOnly is true
+            System.out.print("4) Include Non-Country Currencies (Currently ");
+            if (countryOnly) {
+                System.out.println("Off)");
+            } else {
+                System.out.println("On)");
+            }
+            System.out.println("5) Quit");
+            // allows the user to select a choice from the menu
             System.out.print("Select Option: ");
             input = sc.nextInt();
             sc.nextLine();
             if (input == 1) {
                 // runs the game
-                int[] maxes = {20, 200};
-                g.playGame(4, maxes);
+                g.playGame(4);
             } else if (input == 2) {
                 // prints the instructions
                 instructions();
@@ -84,6 +89,10 @@ public class App
             } else if (input == 3) {
                 // runs the learning tool
                 g.learnConversions();
+            } else if (input == 4) {
+                // toggles non-Country currencies on/off
+                countryOnly = !countryOnly;
+                g.setCountryOnly(countryOnly);
             } else {
                 System.out.println("Goodbye!");
             }
