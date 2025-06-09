@@ -189,7 +189,10 @@ public class Game {
     // prints data for all currencies starting with the string sub
     public void printInRange(String sub, String baseKey) {
         sub = sub.toUpperCase();
+        // prints a divider labeled with the substring
+        System.out.println(sub + " ---------------------------------------------------");
         int i = 0;
+        // prints all results starting with that substring
         while (i < keyArray.size()) {
             String current = names.getString(keyArray.get(i));
             if (current.length() >= sub.length() && current.substring(0, sub.length()).toUpperCase().equals(sub)) {
